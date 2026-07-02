@@ -1,73 +1,68 @@
-// Wait for the DOM to fully load before running scripts
-document.addEventListener("DOMContentLoaded", () => {
-  // ==========================================
-  // PART 1: Login Page Functionality
-  // ==========================================
-  const loginForm = document.getElementById("loginForm");
-  const loginModal = document.getElementById("loginModal");
-  const tryAgainBtn = document.getElementById("tryAgainBtn");
+// =========================================================================
+// PART 1: LOGIN PAGE FUNCTIONALITY
+// =========================================================================
 
-  // Event listener for form submission
-  if (loginForm) {
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault(); // Stop the form from refreshing the page
-      validateLogin();
-    });
-  }
+// Get references to login elements
+const loginForm = document.getElementById("loginForm");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const errorModal = document.getElementById("loginModal");
+const tryAgainBtn = document.getElementById("tryAgainBtn");
 
-  // Event listener to dismiss the modal
-  if (tryAgainBtn) {
-    tryAgainBtn.addEventListener("click", dismissModal);
-  }
+/**
+ * Validates the admin credentials and redirects or triggers the error modal.
+ */
+function validateLogin(event) {
+  event.preventDefault(); // Prevents the form from refreshing the page
 
-  // Function to validate credentials
-  function validateLogin() {
-    const usernameInput = document.getElementById("username").value.trim();
-    const passwordInput = document.getElementById("password").value.trim();
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value.trim();
 
-    const correctUsername = "admin";
-    const correctPassword = "password123";
-
-    if (
-      usernameInput === correctUsername &&
-      passwordInput === correctPassword
-    ) {
-      // Success: Redirect to home page
-      window.location.href = "index.html";
-    } else {
-      // Bonus Challenge: Console log for debugging
-      console.log("Invalid credentials");
-
-      // Failure: Show error modal
-      if (loginModal) {
-        loginModal.style.display = "block";
-      }
+  // Check credentials against assignment rules
+  if (username === "admin" && password === "password123") {
+    window.location.href = "index.html";
+  } else {
+    console.log("Invalid credentials");
+    if (errorModal) {
+      errorModal.style.display = "block"; // Show the error modal
     }
   }
+}
 
-  // Function to hide the modal
-  function dismissModal() {
-    if (loginModal) {
-      loginModal.style.display = "none";
-    }
+/**
+ * Hides the error modal when the user dismisses it.
+ */
+function dismissModal() {
+  if (errorModal) {
+    errorModal.style.display = "none"; // Hide the error modal
   }
+}
 
-  // ==========================================
-  // PART 2: Home Page Navigation Toggle
-  // ==========================================
-  const menuToggleBtn = document.getElementById("menuToggle");
-  const sidebar = document.getElementById("sidebar");
+// Attach Login Event Listeners safely if elements are present on current page
+if (loginForm) {
+  loginForm.addEventListener("submit", validateLogin);
+}
+if (tryAgainBtn) {
+  tryAgainBtn.addEventListener("click", dismissModal);
+}
 
-  if (menuToggleBtn && sidebar) {
-    menuToggleBtn.addEventListener("click", toggleNav);
+// =========================================================================
+// PART 2: HOME PAGE NAVIGATION TOGGLE
+// =========================================================================
+
+const menuToggle = document.getElementById("menuToggle");
+const sidebar = document.getElementById("sidebar");
+
+/**
+ * Toggles the visibility of the sidebar menu using a CSS class.
+ */
+function toggleNav() {
+  if (sidebar) {
+    sidebar.classList.toggle("collapsed");
   }
+}
 
-  // Function to toggle sidebar width
-  function toggleNav() {
-    if (sidebar.style.width === "250px") {
-      sidebar.style.width = "0px";
-    } else {
-      sidebar.style.width = "250px";
-    }
-  }
-});
+// Attach Navigation Event Listener safely if elements are present on current page
+if (menuToggle) {
+  menuToggle.addEventListener("click", toggleNav);
+}
